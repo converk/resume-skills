@@ -2,6 +2,8 @@
 
 两个配套的 agent skill：先把简历整理成结构化的简历文件夹，再用它配合 Computer Use 填招聘网站的表单。
 
+> 使用 LLM 填写简历存在信息泄露风险，请谨慎考虑使用本仓库。
+
 ## 功能
 
 - **resume-to-facts** —— 把一份或多份 PDF / Word 简历整理成「类-实例-属性」结构的 Markdown 简历文件夹。简历里没有的信息不会编造，而是列成清单问你要，直到每条属性都有交代。
@@ -49,5 +51,3 @@
 ```text
 @Computer Use 用 job-form-filling 帮我把这个招聘网站的表单填好，填完先别提交：https://example.com/apply
 ```
-
-> 使用 LLM 填写简历存在信息泄露风险，请谨慎考虑使用本仓库。
