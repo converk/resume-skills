@@ -1,9 +1,11 @@
 ---
 name: job-form-filling
-description: Fill a recruiting website's online resume or application form from the user's locally stored resume folder, one module at a time, verifying every save by reading the values back. Use when the user asks to fill, complete, or update a job application form, online resume, or campus and experienced-hire application using facts already stored locally.
+description: Fill a recruiting website's online resume or application form from the user's locally stored resume folder, one module at a time, verifying every save by reading the values back. Requires Computer Use to drive the browser. Use when the user asks to fill, complete, or update a job application form, online resume, or campus and experienced-hire application using facts already stored locally.
 ---
 
 # 招聘表单填写
+
+本 skill 配合 **Computer Use** 使用：Computer Use 负责真正操作浏览器，本 skill 负责判断每个字段该填什么、按什么顺序填、以及填写的纪律（只保存不提交、逐模块回读核对）。没有 Computer Use 或其他浏览器自动化能力时，按下面「能力探测」降级处理。
 
 数据不在这个 skill 里。本 skill 只负责两件事：判断网页上的字段该取简历文件夹里的哪一条事实，以及按什么顺序、什么纪律把它填进去。具体值一律从简历文件夹读，不凭记忆或推测填写。
 
@@ -45,11 +47,15 @@ description: Fill a recruiting website's online resume or application form from 
 
 动手前先看清当前环境能怎么操作浏览器，再选通道：
 
+**优先使用内置浏览器**（Codex 桌面版应用内的浏览器，而不是用户自己开着的 Chrome / Edge）。内置浏览器与用户自己的浏览器相互隔离，不会撞上"同一账号只能开一个编辑会话"导致保存失败的问题，页面和进程也都在当前任务的可控范围内。登录在同一个内置浏览器里完成。
+
+只有内置浏览器不可用、或站点必须在用户已登录的外部浏览器里才能继续时，才改用外部浏览器，并在报告里说明换了通道。
+
 - **有浏览器自动化能力** → 用它，控件细节按 `references/browser-techniques.md` 处理。
 - **只能注入 DOM 脚本** → 注意"显示有值但校验不过"的假成功，见 `references/browser-techniques.md`。
 - **完全没有浏览器能力** → 降级：产出「字段 → 填什么」的清单，逐字段给出可直接复制的值，由用户手工填。
 
-同一份任务里不要中途换通道。登录与短信验证码由用户本人完成，可以请用户先登录好，再从已登录状态接手。
+同一份任务里不要中途换通道；登录与短信验证码一律由用户本人完成。
 
 ## 流程
 
