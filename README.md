@@ -49,3 +49,5 @@
 ```text
 @Computer Use 用 job-form-filling 帮我把这个招聘网站的表单填好，填完先别提交：https://example.com/apply
 ```
+
+> 使用 LLM 填写简历存在信息泄露风险，请谨慎考虑使用本仓库。
