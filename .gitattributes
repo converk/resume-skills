@@ -1,0 +1,9 @@
+# 统一按 LF 存储，避免跨平台换行符差异
+* text=auto eol=lf
+
+# 二进制文件不做换行符转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.docx binary

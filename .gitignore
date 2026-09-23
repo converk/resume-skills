@@ -1,0 +1,11 @@
+# 工作区数据：真实的简历文件夹（个人数据，不进仓库）
+generated-resume/
+
+# 任务过程中的临时产物（截图、页面渲染图、报告等）
+temp/
+
+# 编辑器与操作系统
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
