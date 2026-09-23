@@ -13,7 +13,7 @@
 
 建议**只装到具体工作区**，不要装成全局 skill：这两个 skill 只服务于简历这一件事，装全局会在别的项目里占用 skill 名额。
 
-1. 下载本仓库（`git clone <本仓库地址>`，或在仓库页面下载 ZIP 后解压），拿到 `resume-to-facts/` 和 `job-form-filling/` 两个目录。
+1. 下载本仓库（`git clone https://github.com/converk/resume-skills.git`，或在仓库页面下载 ZIP 后解压），拿到 `resume-to-facts/` 和 `job-form-filling/` 两个目录。
 
 2. 把这两个目录整体复制到工作区的 skills 目录，目录名就是 skill 名：
 
