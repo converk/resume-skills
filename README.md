@@ -39,7 +39,7 @@
 第一步，整理简历：
 
 ```text
-用 resume-to-facts 把 temp/我的简历.pdf 整理成简历文件夹
+用 resume-to-facts 把我的简历.pdf 整理成简历文件夹
 ```
 
 它会读简历、建好 `generated-resume/`，然后把缺的信息一次性列出来问你。答完之后再进入第二步。
@@ -47,7 +47,5 @@
 第二步，填招聘表单：
 
 ```text
-用 job-form-filling 帮我把这个招聘网站的表单填好，填完先别提交：https://example.com/apply
+@Computer Use 用 job-form-filling 帮我把这个招聘网站的表单填好，填完先别提交：https://example.com/apply
 ```
-
-它填完会停下来等你确认，是否投递由你自己决定。
