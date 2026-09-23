@@ -1,49 +1,53 @@
 # resume-skills
 
-两个给 agent 用的 skill：一个把简历变成结构化的简历文件夹，另一个拿简历文件夹去填招聘网站的表单。
+两个配套的 agent skill：先把简历整理成结构化的简历文件夹，再用它填招聘网站的表单。
 
 ## 功能
 
-- **`resume-to-facts/`** —— 读一份或多份 PDF / Word 简历，按「类-实例-属性」生成 Markdown 简历文件夹。简历里没有的信息不会被编造，而是整理成一份清单问你要，直到每个实例的每条属性都有交代。
-- **`job-form-filling/`** —— 读简历文件夹，把招聘网站的在线简历或投递表单填好。按模块填写、逐个保存并回读核对，不自动提交。
+- **resume-to-facts** —— 把一份或多份 PDF / Word 简历整理成「类-实例-属性」结构的 Markdown 简历文件夹。简历里没有的信息不会编造，而是列成清单问你要，直到每条属性都有交代。
+- **job-form-filling** —— 读简历文件夹，把招聘网站的在线简历或投递表单填好。按模块填写、逐个保存并回读核对，不自动提交。
 
-两个 skill 配套使用：第一个产出简历文件夹，第二个消费它。
-
-## 目录
-
-```text
-工作/
-├── generated-resume/       # 数据：真实的简历文件夹（把 resumeTemplate 复制过去、填上内容后的产物）
-└── resume-skills/          # 技能包：可以整体搬走，里面不放个人数据
-    ├── README.md           # 本文件
-    ├── job-form-filling/   # skill：按简历文件夹填写招聘网站表单
-    └── resume-to-facts/    # skill：把简历整理成简历文件夹
-        ├── SKILL.md
-        ├── references/
-        └── resumeTemplate/ # 模板：13 个类各一份 README.md + 模板.md，外加根 README.md
-```
-
-`resumeTemplate/` 归 `resume-to-facts`：建库时把它整份复制到工作区，就成了 `generated-resume/`。`job-form-filling` 不碰模板，只读 `generated-resume/`（类目录里带着同一份 `README.md` 与 `模板.md`）。模板里不放任何个人信息；数据一律放在工作区的 `generated-resume/` 里，不进技能包。
-
-两个 skill 各带一份 `references/resume-folder-spec.md`（同一份结构契约的两份副本）：建库的按它写，填表的按它读，谁都不需要去翻对方的目录。**改结构契约时两份要一起改**，改完可以 `diff` 一下确认内容一致。
-
-## 使用
-
-- 支持 skill 目录的 harness：直接说「把这份简历整理成简历文件夹」「把这个招聘网站的表单填好」，或按该 harness 的方式显式调用对应的 skill。
-- 不支持 skill 目录的 harness：把对应的 `SKILL.md` 全文作为系统提示或首轮上下文交给 agent，需要细节时再让它读该技能目录下的 `references/`。
-- 只用一次：把「任务描述 + 对应的 `SKILL.md` 全文」贴给任意 agent 即可，不需要安装。
-
-结构和名字都是固定的，不做搜索：数据是工作区根目录下的 `generated-resume/`，模板是 `resume-to-facts/resumeTemplate/`。工作区根目录就是当前工作目录，用户明确指定了别处时按用户的来。
+  **这个 skill 需要配合 Computer Use 使用**，靠它操作浏览器点开页面、填控件、点保存。
 
 ## 安装
 
-把 `resume-to-facts/` 和 `job-form-filling/` 两个目录整体复制到 harness 的 skills 目录即可，目录名就是 skill 名：
+建议**只装到具体工作区**，不要装成全局 skill：这两个 skill 只服务于简历这一件事，装全局会在别的项目里占用 skill 名额。
 
-- Codex：`$CODEX_HOME/skills`（未设置时是 `~/.codex/skills`）
-- 其他 harness：它自己的 skills 目录，或任何会被扫描的目录
+1. 下载本仓库（`git clone <本仓库地址>`，或在仓库页面下载 ZIP 后解压），拿到 `resume-to-facts/` 和 `job-form-filling/` 两个目录。
 
-两个 skill 目录里只有 `SKILL.md` 与 `references/`，不带 harness 专用的 agent 定义和默认提示词：`SKILL.md` 的 front-matter 只写 `name` 与 `description`，其余 harness 依赖的元数据由各 harness 自己补。
+2. 把这两个目录整体复制到工作区的 skills 目录，目录名就是 skill 名：
 
-模板跟着 `resume-to-facts/` 一起安装，不需要单独处理；`generated-resume/` 是数据，任何时候都不进 skills 目录。
+   - Codex：`<工作区>/.agents/skills/`
+   - DeepSeek Harness：`<工作区>/.dsh/skills/`（DSH 也识别 `.agents/skills/`）
 
-两个 skill 都不依赖脚本运行时，复制过去即可使用；不需要时直接删掉目录就算卸载。
+   装好后形如：
+
+   ```text
+   <工作区>/.agents/skills/
+   ├── resume-to-facts/
+   └── job-form-filling/
+   ```
+
+   注意不要复制到全局目录（`~/.agents/skills`、`<dshHome>/skills`）。模板 `resumeTemplate/` 跟着 `resume-to-facts/` 一起装，不用单独处理。装完如果没生效就重启一下 harness。
+
+3. **建议使用 Codex**：`job-form-filling` 依赖 Computer Use 操作浏览器，Codex 桌面版自带这项能力，开箱可用。
+
+## 使用
+
+先用 `resume-to-facts` 建简历文件夹（产物是工作区根目录下的 `generated-resume/`），再用 `job-form-filling` 拿它填表。这两个 skill 本身不含个人数据，你的数据只放在 `generated-resume/` 里。
+
+第一步，整理简历：
+
+```text
+用 resume-to-facts 把 temp/我的简历.pdf 整理成简历文件夹
+```
+
+它会读简历、建好 `generated-resume/`，然后把缺的信息一次性列出来问你。答完之后再进入第二步。
+
+第二步，填招聘表单：
+
+```text
+用 job-form-filling 帮我把这个招聘网站的表单填好，填完先别提交：https://example.com/apply
+```
+
+它填完会停下来等你确认，是否投递由你自己决定。
