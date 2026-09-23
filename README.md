@@ -1,6 +1,6 @@
 # resume-skills
 
-两个配套的 agent skill：先把简历整理成结构化的简历文件夹，再用它填招聘网站的表单。
+两个配套的 agent skill：先把简历整理成结构化的简历文件夹，再用它配合 Computer Use 填招聘网站的表单。
 
 ## 功能
 
