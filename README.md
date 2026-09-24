@@ -1,6 +1,6 @@
 # resume-skills
 
-两个配套的 agent skill：先把简历整理成结构化的简历文件夹，再用它配合 Computer Use 填招聘网站的表单。
+两个配套的 agent skill：先把简历整理成结构化的简历文件夹，再用 @Browser（Codex 的内置浏览器）填招聘网站的表单。
 
 > 使用 LLM 填写简历存在信息泄露风险，请谨慎考虑使用本仓库。
 
@@ -9,7 +9,7 @@
 - **resume-to-facts** —— 把一份或多份 PDF / Word 简历整理成「类-实例-属性」结构的 Markdown 简历文件夹。简历里没有的信息不会编造，而是列成清单问你要，直到每条属性都有交代。
 - **job-form-filling** —— 读简历文件夹，把招聘网站的在线简历或投递表单填好。按模块填写、逐个保存并回读核对，不自动提交。
 
-  **这个 skill 需要配合 Computer Use 使用**，靠它操作浏览器点开页面、填控件、点保存。
+  **这个 skill 只用 @Browser（Codex 的内置浏览器）**：每个会话各有一份独立的浏览器，所以多个会话可以同时填不同的网站，附件上传也走同一条通道。
 
 ## 安装
 
@@ -32,7 +32,7 @@
 
    注意不要复制到全局目录（`~/.agents/skills`、`<dshHome>/skills`）。模板 `resumeTemplate/` 跟着 `resume-to-facts/` 一起装，不用单独处理。装完如果没生效就重启一下 harness。
 
-3. **建议使用 Codex**：`job-form-filling` 依赖 Computer Use 操作浏览器，Codex 桌面版自带这项能力，开箱可用。
+3. **建议使用 Codex**：`job-form-filling` 用 Codex 桌面版自带的 @Browser 操作页面，开箱可用，并支持多会话并行。
 
 ## 使用
 
@@ -49,5 +49,7 @@
 第二步，填招聘表单：
 
 ```text
-@Computer Use 用 job-form-filling 帮我把这个招聘网站的表单填好，填完先别提交：https://example.com/apply
+@Browser 用 job-form-filling 帮我把这个招聘网站的表单填好，填完先别提交：https://example.com/apply
 ```
+
+需要同时填多个网站时，每个网站开一个会话，各用各的 @Browser 并行填，互不干扰。登录、短信验证码和上传附件的确认仍然要你自己来。
