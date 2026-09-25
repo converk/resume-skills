@@ -1,11 +1,11 @@
 ---
 name: job-form-filling
-description: Fill a recruiting website's online resume or application form from the user's locally stored resume folder, one module at a time, verifying every save by reading the values back. Runs in the Codex in-app browser, one browser per session, so several sessions can fill different sites in parallel. Use when the user asks to fill, complete, or update a job application form, online resume, or campus and experienced-hire application using facts already stored locally.
+description: Fill a recruiting website's online resume or application form from the user's locally stored resume folder, one module at a time, verifying every save by reading the values back. Runs in the agent app's built-in browser, one browser instance per session, so several sessions can fill different sites in parallel. Use when the user asks to fill, complete, or update a job application form, online resume, or campus and experienced-hire application using facts already stored locally.
 ---
 
 # 招聘表单填写
 
-本 skill 只用**内置浏览器**（Codex 桌面版应用内的浏览器）：内置浏览器负责真正打开和操作页面，本 skill 负责判断每个字段该填什么、按什么顺序填、以及填写的纪律（只保存不提交、逐模块回读核对）。不用 Computer Use，也不需要它——附件上传同样走内置浏览器。内置浏览器不可用时，按下面「能力探测」降级处理。
+本 skill 只用**内置浏览器**（本 Agent 应用内的浏览器）：内置浏览器负责真正打开和操作页面，本 skill 负责判断每个字段该填什么、按什么顺序填、以及填写的纪律（只保存不提交、逐模块回读核对）。不用系统级桌面自动化（会接管真实鼠标键盘、抢占桌面的那类通道），也不需要它——附件上传同样走内置浏览器。内置浏览器不可用时，按下面「能力探测」降级处理。
 
 数据不在这个 skill 里。本 skill 只负责两件事：判断网页上的字段该取简历文件夹里的哪一条事实，以及按什么顺序、什么纪律把它填进去。具体值一律从简历文件夹读，不凭记忆或推测填写。
 
@@ -45,7 +45,7 @@ description: Fill a recruiting website's online resume or application form from 
 
 ## 能力探测
 
-全程只用**内置浏览器**（Codex 桌面版应用内的浏览器，而不是用户自己开着的 Chrome / Edge）。它与用户自己的浏览器相互隔离，不会撞上"同一账号只能开一个编辑会话"导致保存失败的问题，页面和进程也都在当前任务的可控范围内。登录在同一个内置浏览器里完成。
+全程只用**内置浏览器**（本 Agent 应用内的浏览器，而不是用户自己开着的 Chrome / Edge）。它与用户自己的浏览器相互隔离，不会撞上"同一账号只能开一个编辑会话"导致保存失败的问题，页面和进程也都在当前任务的可控范围内。登录在同一个内置浏览器里完成。
 
 动手前先确认内置浏览器可用。按这个顺序用它的接口，控件细节见 `references/browser-techniques.md`：
 
@@ -54,7 +54,7 @@ description: Fill a recruiting website's online resume or application form from 
 3. **坐标点击** → 无障碍树里没有对应元素时，看截图按坐标点。
 4. **底层协议** → 上层读不到真实值时（例如 `.value` 读回旧值）用它取真实值；找不到隐藏的文件控件时也可以用它。
 
-只有内置浏览器不可用、或站点必须在用户已登录的外部浏览器里才能继续时，才改用外部浏览器，并在报告里说明换了通道。**不要退回 Computer Use**：它是应用级单例、会抢占真实桌面，正是并行填表要避开的瓶颈；也不要拿它去操作内置浏览器本身。
+只有内置浏览器不可用、或站点必须在用户已登录的外部浏览器里才能继续时，才改用外部浏览器，并在报告里说明换了通道。**不要退回系统级桌面自动化**：这类通道是应用级单例、会抢占真实桌面，正是并行填表要避开的瓶颈；也不要拿它去操作内置浏览器本身。
 
 完全没有浏览器能力时降级：产出「字段 → 填什么」的清单，逐字段给出可直接复制的值，由用户手工填。
 
@@ -123,7 +123,7 @@ description: Fill a recruiting website's online resume or application form from 
 ### 附件与上传
 
 - 有的简历网站提供"上传简历文件、由系统自动解析并填充"的入口。这类入口是**整体导入**：上传后往往会替换掉页面上已有的简历内容（有的会先弹一个"将替换现有内容"的确认）。要传附件时不要走这个入口，走表单里的附件或证明材料上传控件。
-- **内置浏览器支持上传附件**，不需要 Computer Use，也不会弹系统文件对话框：先把"等待文件选择器"挂上，再触发上传控件，然后把文件的绝对路径交给选择器。具体写法见 `references/browser-techniques.md`。
+- **内置浏览器支持上传附件**，不需要系统级桌面自动化，也不会弹系统文件对话框：先把"等待文件选择器"挂上，再触发上传控件，然后把文件的绝对路径交给选择器。具体写法见 `references/browser-techniques.md`。
 - 上传后要回读页面上显示的文件名，确认真的挂上去了，不要只凭"点过了"。
 - 替换已上传的附件：先删掉原来那个（有的站点删除不弹确认、点了直接删），再重新上传。
 - 有的站点要求先勾选隐私政策或同意条款才能保存；这类勾选在页面重新加载后会被重置，保存前检查一遍。
@@ -134,7 +134,7 @@ description: Fill a recruiting website's online resume or application form from 
 - 不刷新页面、不新开标签页、不用第二个页面核对数据。
 - 不点提交或投递类的按钮：填完就停在保存态，把是否提交留给用户。
 - 不碰用户自己浏览器里开着的同一个简历编辑页：两边各开一个编辑页时，任一边保存都会覆盖整栏。发现用户也在那边改，提醒他只查看、不要在那边保存。
-- 不用 Computer Use，也不用任何接管真实鼠标键盘、抢占桌面的方式操作页面。
+- 不用任何接管真实鼠标键盘、抢占桌面的系统级桌面自动化通道操作页面。
 - 不为并行加锁、排队或轮询：会话之间本来就不共享浏览器，加这些只会把并行堵回串行。
 - 不在简历文件夹里留任何临时产物。
 
